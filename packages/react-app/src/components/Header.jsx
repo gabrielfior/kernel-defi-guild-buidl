@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "antd";
-
+import template from '../kernel_logo.png';
 const { Title, Text } = Typography;
 
 // displays a page header
@@ -13,6 +13,7 @@ export default function Header({ link, title, subTitle, ...props }) {
           <Title level={4} style={{ margin: "0 0.5rem 0 0" }}>{title}</Title>
         </a>
         <Text type="secondary" style={{ textAlign: "left" }}>{subTitle}</Text>
+        <img src={template} alt="test" style={{paddingTop: "10px"}} />
       </div>
       {props.children}
     </div>
@@ -20,7 +21,7 @@ export default function Header({ link, title, subTitle, ...props }) {
 }
 
 Header.defaultProps = {
-  link: "https://github.com/austintgriffith/scaffold-eth",
-  title: "🏗 scaffold-eth",
-  subTitle: "forkable Ethereum dev stack focused on fast product iteration",
+  link: "https://www.kernel.community/en/",
+  title: "Kernel Buidl Project",
+  subTitle: "Initial project for Kernel DeFi Guild discussion",
 };

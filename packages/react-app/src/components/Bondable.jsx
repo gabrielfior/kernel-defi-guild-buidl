@@ -1,13 +1,12 @@
 /* eslint-disable */
-import { Button, Card, Input, Col, Row } from "antd";
-import { useContractExistsAtAddress, useContractLoader } from "eth-hooks";
-import { typeFromAST } from "graphql";
-import React, { useMemo, useState, useEffect } from "react";
+import { Button, Card, Input, Col, Row, Divider, Descriptions } from "antd";
+import { useContractLoader } from "eth-hooks";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 export default function Bondable({
   customContract,
-  account,
+  address,
   gasPrice,
   signer,
   provider,
@@ -15,10 +14,10 @@ export default function Bondable({
   show,
   blockExplorer,
   chainId,
-  contractConfig,
+  contractConfig
 }) {
   const history = useHistory();
-  const [address, setAddress] = useState("");
+  const [bondableContractAddress, setBondableContractAddress] = useState("");
   const [admin, setAdmin] = useState("");
   const [marketKeys, setMarketKeys] = useState([]);
 
@@ -48,11 +47,6 @@ export default function Bondable({
   }
 
   const createMarket = async () => {
-    console.log("createMarket", signer);
-    //console.log('config', config);
-    console.log('provider', provider);
-    
-    //let bondableContract = new ethers.ContractAt(ROUTER_ADDRESS, IUniswapV2Router02ABI, signer);
     await contract.createMarket(underlying, maturity, maximumDebt, price, marketName, tokenName, symbol);
     console.log("market created");
     await asyncSetMarketKeys();
@@ -73,22 +67,40 @@ export default function Bondable({
     history.push(`/market/underlying/${underlying}/maturity/${maturity}`);
   };
 
+  const style = {
+    padding: "8px 0",
+    margin: "10px",
+    border: "5px dashed green",
+  };
+
   const getMarketKeysRepr = () => {
     let items = [];
-    marketKeys.map((item, index) => {
-      items.push(
-        <div key={index}>
-          <Card title="Market" style={{ width: 240 }}>
-            <p> Underlying {item.underlying.toString()}</p>
-            <p> Maturity {item.maturity.toString()}</p>
-            <Button type="primary" onClick={() => handleClickMarket(item.underlying, item.maturity)}>
-              Purchase bond
-            </Button>
-          </Card>
-        </div>,
-      );
-    });
-    return items;
+    return (
+      <>
+        <Divider orientation="center">Markets</Divider>
+        <Row gutter={16}>
+          {marketKeys.map((item, index) => {
+            return (
+              <Col className="gutter-row" span={12}>
+                <Descriptions
+                  layout="vertical"
+                  bordered
+                  style={{ margin: "5px" }}
+                  extra={
+                    <Button type="primary" onClick={() => handleClickMarket(item.underlying, item.maturity)}>
+                      Purchase bond
+                    </Button>
+                  }
+                >
+                  <Descriptions.Item label="Underlying">{item.underlying}</Descriptions.Item>
+                  <Descriptions.Item label="maturity">{item.maturity.toString()}</Descriptions.Item>
+                </Descriptions>
+              </Col>
+            );
+          })}
+        </Row>
+      </>
+    );
   };
 
   useEffect(() => {
@@ -96,7 +108,7 @@ export default function Bondable({
     if (contracts[name] !== undefined) {
       console.log("entered useEffect", contracts[name]);
       let bondableContract = contracts[name];
-      setAddress(bondableContract.address);
+      setBondableContractAddress(bondableContract.address);
 
       // call the function
       asyncSetAdmin(bondableContract).catch(console.error);
@@ -116,13 +128,17 @@ export default function Bondable({
           }
           size="large"
           style={{ marginTop: 25, width: "100%" }}
-        ></Card>
+        >
+          <Descriptions layout="horizontal" bordered style={{ margin: "10px" }}>
+            <Descriptions.Item label="Address">{bondableContractAddress}</Descriptions.Item>
+            <Descriptions.Item label="Admin">{admin}</Descriptions.Item>
+          </Descriptions>
+        </Card>
 
-        <p>address {address}</p>
-        <p>admin {admin}</p>
-
-        <p>market keys</p>
+        {/* market keys */}
         {getMarketKeysRepr()}
+
+        <Divider orientation="center"></Divider>
       </div>
       <div className="createMarket">
         <h2>create market</h2>

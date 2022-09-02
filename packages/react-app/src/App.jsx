@@ -32,7 +32,6 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
-//import toast, { Toaster } from 'react-hot-toast';
 import Bondable from "./components/Bondable";
 import Market from "./components/Market";
 
@@ -324,7 +323,6 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
-          <h1>test</h1>
           <Contract
             name="YourContract"
             price={price}
@@ -421,12 +419,15 @@ function App(props) {
       <ThemeSwitch />
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
+      
+      {/*
       <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
         <Row align="middle" gutter={[4, 4]}>
           <Col span={8}>
             <Ramp price={price} address={address} networks={NETWORKS} />
           </Col>
 
+         
           <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
             <GasGauge gasPrice={gasPrice} />
           </Col>
@@ -444,14 +445,15 @@ function App(props) {
               Support
             </Button>
           </Col>
+        
         </Row>
+        
 
-        {/* <Toaster /> */}
-
+       
         <Row align="middle" gutter={[4, 4]}>
           <Col span={24}>
             {
-              /*  if the local provider has a signer, let's show the faucet:  */
+              /*  if the local provider has a signer, let's show the faucet:  
               faucetAvailable ? (
                 <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
               ) : (
@@ -460,7 +462,10 @@ function App(props) {
             }
           </Col>
         </Row>
+        
       </div>
+      */}
+          
     </div>
   );
 }
